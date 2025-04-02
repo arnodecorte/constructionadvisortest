@@ -3,4 +3,4 @@ openai
 langchain_community
 faiss-cpu
 tiktoken
-python-dotenvt
+python-dotenv
