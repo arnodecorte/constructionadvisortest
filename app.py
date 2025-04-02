@@ -12,6 +12,21 @@ from langchain.chains import RetrievalQA
 
 load_dotenv()
 
+#UI prompt to enter API key
+
+st.sidebar.title("OpenAI API Key required")
+api_key = st.sidebar.text_input(
+    "Enter your OpenAI API key:", 
+    type="password",
+    value=os.getenv("OPENAI_API_KEY")
+)
+
+if not api_key:
+    st.warning("App cannot function without API key")
+    st.stop()
+
+# Set OpenAI API key
+os.environ["OPENAI_API_KEY"] = api_key
 st.title("Construction Advisor")
 st.markdown("Ask questions on Dutch building regulations")
 
