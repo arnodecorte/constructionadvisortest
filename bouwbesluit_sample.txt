@@ -1,0 +1,11 @@
+Section 1. Fire Safety:
+All residential buildings must have at least one smoke detector per floor. Buildings taller than 13 meters must include a secondary escape route that complies with NEN 8112 standards.
+
+Section 2. Accessibility:
+Public buildings must be accessible to wheelchair users. Entrances must be at least 90 cm wide and equipped with automatic doors.
+
+Section 3. Energy Efficiency:
+New constructions must meet BENG (Bijna Energie Neutrale Gebouwen) requirements. Solar panels must be included if roof orientation is optimal.
+
+Section 4. Noise Insulation:
+Apartments must have a minimum sound insulation value of 52 dB between units, measured in accordance with NEN 5077.
