@@ -28,18 +28,18 @@ if not api_key:
 # Set OpenAI API key
 os.environ["OPENAI_API_KEY"] = api_key
 st.title("Construction Advisor")
-st.markdown("Ask questions on Dutch building regulations")
+st.markdown("Stel vragen over de BBL")
 
 #load building regulations
 
-with open("bouwbesluit_sample.txt", "r", encoding="utf-8") as f:
+with open("bbl_full_text.txt", "r", encoding="utf-8") as f:
     regulation_text = f.read()
 
 #split into chunks so the AI can handle it
 
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50,
+    chunk_size=1000,
+    chunk_overlap=200,
     separators=["\n\n", "\n", ".", " "]
 )
 chunks = splitter.split_text(regulation_text)
