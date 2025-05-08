@@ -8,11 +8,36 @@ from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 
+from supabase import create_client, Client
+import datetime
+import os
+
 # Load .env file
 
 load_dotenv()
+    
+# Load Supabase credentials from environment variables
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
 
-#UI prompt to enter API key
+# Initiate Supabase Client
+supabase: Client = create_client(supabase_url, supabase_key)
+
+# Feedback Submission Function
+def submit_feedback(question, answer, source_chunks, rating, comment=""):
+    timestamp = datetime.datetime.now().isoformat()
+    data = {
+        "question": question,
+        "answer": answer,
+        "source_chunks": source_chunks,
+        "rating": rating,
+        "comment": comment,
+        "timestamp": timestamp
+    }
+    response = supabase.table("feedback").insert(data).execute()
+    return response
+
+#Load the OpenAI API key from the environment
 
 st.sidebar.title("OpenAI API Key required")
 api_key = os.getenv("OPENAI_API_KEY")
@@ -65,3 +90,17 @@ if question:
     st.markdown("### Source used:")
     for doc in result["source_documents"]:
         st.write(doc.page_content[:300])
+    
+    #Feedback Section
+    st.markdown("### Was this answer helpful?")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("👍 Yes"):
+            submit_feedback(question, result["result"], "\n---\n".join([doc.page_content for doc in result["source_documents"]]), True)
+            st.success("Thank you for your feedback!")
+    with col2:
+        if st.button("👎 No"):
+            feedback_comment = st.text_input("What was wrong with the answer?")
+            if feedback_comment:
+                submit_feedback(question, result["result"], "\n---\n".join([doc.page_content for doc in result["source_documents"]]), False, feedback_comment)
+                st.warning("Feedback submitted for training data, thanks")
