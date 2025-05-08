@@ -17,8 +17,8 @@ import os
 load_dotenv()
     
 # Load Supabase credentials from environment variables
-supabase_url = st.secrets("SUPABASE_URL")
-supabase_key = st.secrets("SUPABASE_KEY")
+supabase_url = st.secrets["SUPABASE_URL"]
+supabase_key = st.secrets["SUPABASE_KEY"]
 
 # Initiate Supabase Client
 supabase: Client = create_client(supabase_url, supabase_key)
