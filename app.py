@@ -15,11 +15,8 @@ load_dotenv()
 #UI prompt to enter API key
 
 st.sidebar.title("OpenAI API Key required")
-api_key = st.sidebar.text_input(
-    "Enter your OpenAI API key:", 
-    type="password",
-    value=os.getenv("OPENAI_API_KEY")
-)
+api_key = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = api_key
 
 if not api_key:
     st.warning("App cannot function without API key")
