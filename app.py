@@ -17,8 +17,8 @@ import os
 load_dotenv()
     
 # Load Supabase credentials from environment variables
-supabase_url = os.getenv("SUPABASE_URL")
-supabase_key = os.getenv("SUPABASE_KEY")
+supabase_url = st.secrets("SUPABASE_URL")
+supabase_key = st.secrets("SUPABASE_KEY")
 
 # Initiate Supabase Client
 supabase: Client = create_client(supabase_url, supabase_key)
@@ -40,7 +40,7 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
 #Load the OpenAI API key from the environment
 
 st.sidebar.title("OpenAI API Key required")
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = st.secrets["OPENAI_API_KEY"]
 os.environ["OPENAI_API_KEY"] = api_key
 
 if not api_key:
