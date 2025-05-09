@@ -49,8 +49,8 @@ if not api_key:
 
 # Set OpenAI API key
 os.environ["OPENAI_API_KEY"] = api_key
-st.title("Construction Advisor")
-st.markdown("Stel vragen over de BBL")
+st.title("ZJAC - BBL AI Assistant")
+st.markdown("Deze applicatie helpt je bij het vinden van informatie over de Nederlandse bouwvoorschriften (Bouwbesluit). Stel een vraag en ontvang een antwoord gebaseerd op de regelgeving.")
 
 #load building regulations
 
@@ -79,17 +79,29 @@ qa_chain = RetrievalQA.from_chain_type(
     return_source_documents=True
 )
 
+# Check for Debug Mode
+debug_mode = st.secrets.get("DEBUG_MODE", "false").lower() == "true"
+if debug_mode:
+    st.warning("DEBUG MODE IS AAN")
+
 # User input
 question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
 if question:
-    result = qa_chain(question)
+    # Provide dummy response for debugging purposes
+
+    if debug_mode:
+        result = {
+            "result": "Dit is een voorbeeldantwoord voor debugdoeleinden.",
+            "source_documents": [
+                {"page_content": "Dit is een voorbeeldbron."}
+            ]
+        }
+    else:
+        # actual GPT-3.5 call
+        result = qa_chain(question)
 
     st.markdown("### Antwoord:")
     st.write(result["result"])
-
-    st.markdown("### Gebruikte bron:")
-    for doc in result["source_documents"]:
-        st.write(doc.page_content[:300])
     
     # Feedback Section
     st.markdown("### Was dit antwoord nuttig?")
@@ -124,3 +136,7 @@ if question:
             )
             st.warning("Feedback ingediend voor trainingsdata, bedankt!")
             st.session_state.no_feedback = False  # Reset the feedback state after submission
+
+    st.markdown("### Gebruikte bron:")
+    for doc in result["source_documents"]:
+        st.write(doc.page_content[:300])
