@@ -142,4 +142,4 @@ if question:
         if isinstance(doc, dict):
             st.write(doc["page_content"][:300]) # Process as a dictionary if debug mode is on
         else:
-        st.write(doc.page_content[:300]) # Process as a LangChain document if not in debug mode
+            st.write(doc.page_content[:300]) # Process as a LangChain document if not in debug mode
