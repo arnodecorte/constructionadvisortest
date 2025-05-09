@@ -125,17 +125,21 @@ if question:
             st.session_state.no_feedback = True  # This will trigger the feedback comment input
             
     if st.session_state.no_feedback:
-        feedback_comment = st.text_input("Wat was er mis met het antwoord?")
-        if feedback_comment:
-            submit_feedback(
-                question,
-                result["result"],
-                "\n---\n".join([doc.page_content for doc in result["source_documents"]]),
-                False,
-                feedback_comment
-            )
-            st.warning("Feedback ingediend voor trainingsdata, bedankt!")
+        st.markdown('### Feedback:')
+        feedback_comment = st.text_area("Wat was er mis met het antwoord?", height=150)
+        if st.button("Verzend feedback"):
+            if feedback_comment.strip(): # Ensure comment is not empty
+                submit_feedback(
+                    question,
+                    result["result"],
+                    "\n---\n".join([doc.page_content for doc in result["source_documents"]]),
+                    False,
+                    feedback_comment
+                )
+            st.success("Feedback ingediend voor trainingsdata, bedankt!")
             st.session_state.no_feedback = False  # Reset the feedback state after submission
+        else:
+            st.warning("Vul alstublieft een feedbackcommentaar in voordat u verzendt.")
 
     st.markdown("### Gebruikte bron:")
     for doc in result["source_documents"]:
