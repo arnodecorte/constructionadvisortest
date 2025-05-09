@@ -34,8 +34,16 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
         "comment": comment,
         "timestamp": timestamp
     }
-    response = supabase.table("feedback").insert(data).execute()
-    return response
+
+    st.write("📤 Submitting this to Supabase:")
+    st.json(data)  # Add this line temporarily for debugging
+
+    try:
+        response = supabase.table("ZJAC - feedback").insert(data).execute()
+        return response
+    except Exception as e:
+        st.error(f"An error occurred while submitting feedback: {e}")
+        return None
 
 #Load the OpenAI API key from the environment
 
