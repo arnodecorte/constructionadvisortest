@@ -80,7 +80,7 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 # Check for Debug Mode
-debug_mode = st.secrets.get("DEBUG_MODE", "false").lower() == "true"
+debug_mode = st.secrets.get("DEBUG_MODE", False)
 if debug_mode:
     st.warning("DEBUG MODE IS AAN")
 
