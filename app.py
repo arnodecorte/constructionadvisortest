@@ -39,7 +39,6 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
 
 #Load the OpenAI API key from the environment
 
-st.sidebar.title("OpenAI API Key required")
 api_key = st.secrets["OPENAI_API_KEY"]
 os.environ["OPENAI_API_KEY"] = api_key
 
