@@ -102,13 +102,22 @@ if question:
     #Feedback Section
     st.markdown("### Was this answer helpful?")
     col1, col2 = st.columns(2)
+    
+    # Use session state to track the feedback button state
+    if "no_feedback" not in st.session_state:
+        st.session_state.no_feedback = False
+    
     with col1:
         if st.button("👍 Yes"):
             submit_feedback(question, result["result"], "\n---\n".join([doc.page_content for doc in result["source_documents"]]), True)
             st.success("Thank you for your feedback!")
     with col2:
         if st.button("👎 No"):
-            feedback_comment = st.text_input("What was wrong with the answer?")
-            if feedback_comment:
+            st.session_state.no_feedback = True # This will trigger the feedback comment input
+            
+    if st.session_state.no_feedback:
+        feedback_comment = st.text_input("What was wrong with the answer?")
+        if feedback_comment:
                 submit_feedback(question, result["result"], "\n---\n".join([doc.page_content for doc in result["source_documents"]]), False, feedback_comment)
                 st.warning("Feedback submitted for training data, thanks")
+                st.session_state.no_feedback = False # Reset the feedback state after submission
