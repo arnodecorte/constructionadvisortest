@@ -36,14 +36,6 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
     }
 
     st.write("📤 Submitting this to Supabase:")
-    st.json(data)  # Add this line temporarily for debugging
-
-    try:
-        response = supabase.table("ZJAC - feedback").insert(data).execute()
-        return response
-    except Exception as e:
-        st.error(f"An error occurred while submitting feedback: {e}")
-        return None
 
 #Load the OpenAI API key from the environment
 
@@ -87,20 +79,20 @@ qa_chain = RetrievalQA.from_chain_type(
     return_source_documents=True
 )
 
-#user input
-question = st.text_input("Ask a question about Dutch building regulations:")
+# User input
+question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
 if question:
-    result=qa_chain(question)
+    result = qa_chain(question)
 
-    st.markdown("### Answer:")
+    st.markdown("### Antwoord:")
     st.write(result["result"])
 
-    st.markdown("### Source used:")
+    st.markdown("### Gebruikte bron:")
     for doc in result["source_documents"]:
         st.write(doc.page_content[:300])
     
-    #Feedback Section
-    st.markdown("### Was this answer helpful?")
+    # Feedback Section
+    st.markdown("### Was dit antwoord nuttig?")
     col1, col2 = st.columns(2)
     
     # Use session state to track the feedback button state
@@ -108,16 +100,27 @@ if question:
         st.session_state.no_feedback = False
     
     with col1:
-        if st.button("👍 Yes"):
-            submit_feedback(question, result["result"], "\n---\n".join([doc.page_content for doc in result["source_documents"]]), True)
-            st.success("Thank you for your feedback!")
+        if st.button("👍 Ja"):
+            submit_feedback(
+                question,
+                result["result"],
+                "\n---\n".join([doc.page_content for doc in result["source_documents"]]),
+                True
+            )
+            st.success("Bedankt voor je feedback!")
     with col2:
-        if st.button("👎 No"):
-            st.session_state.no_feedback = True # This will trigger the feedback comment input
+        if st.button("👎 Nee"):
+            st.session_state.no_feedback = True  # This will trigger the feedback comment input
             
     if st.session_state.no_feedback:
-        feedback_comment = st.text_input("What was wrong with the answer?")
+        feedback_comment = st.text_input("Wat was er mis met het antwoord?")
         if feedback_comment:
-                submit_feedback(question, result["result"], "\n---\n".join([doc.page_content for doc in result["source_documents"]]), False, feedback_comment)
-                st.warning("Feedback submitted for training data, thanks")
-                st.session_state.no_feedback = False # Reset the feedback state after submission
+            submit_feedback(
+                question,
+                result["result"],
+                "\n---\n".join([doc.page_content for doc in result["source_documents"]]),
+                False,
+                feedback_comment
+            )
+            st.warning("Feedback ingediend voor trainingsdata, bedankt!")
+            st.session_state.no_feedback = False  # Reset the feedback state after submission
