@@ -139,4 +139,7 @@ if question:
 
     st.markdown("### Gebruikte bron:")
     for doc in result["source_documents"]:
-        st.write(doc.page_content[:300])
+        if isinstance(doc, dict):
+            st.write(doc["page_content"][:300]) # Process as a dictionary if debug mode is on
+        else:
+        st.write(doc.page_content[:300]) # Process as a LangChain document if not in debug mode
