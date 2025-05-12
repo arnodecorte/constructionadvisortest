@@ -157,6 +157,6 @@ if question:
 
     # Embed the HTML file in a scrollable iframe with a white background
     iframe_code = f"""
-<iframe srcdoc="{html_file_content}" width="100%" height="600px" style="border:none; background-color:white;"></iframe>
+<iframe srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white;"></iframe>
 """
     st.components.v1.html(iframe_code, height=600, scrolling=True)
