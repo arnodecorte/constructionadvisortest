@@ -83,6 +83,7 @@ debug_mode = st.secrets.get("DEBUG_MODE", False)
 if debug_mode:
     st.warning("DEBUG MODE IS AAN")
 
+
 # User input
 question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
 if question:
@@ -146,3 +147,15 @@ if question:
             st.write(doc["page_content"][:300]) # Process as a dictionary if debug mode is on
         else:
             st.write(doc.page_content[:300]) # Process as a LangChain document if not in debug mode
+    
+    # Display BBL Html as a source
+    st.markdown("### Bronnen")
+
+    html_file_path = "bbl_full_text.html"
+    with open(html_file_path, "r", encoding="utf-8") as html_file:
+        html_file_content = html_file.read()
+
+    st.components.v1.html(
+        html_file_content,
+        height=600, # Adjust height as needed
+    )
