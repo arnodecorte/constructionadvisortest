@@ -155,7 +155,8 @@ if question:
     with open(html_file_path, "r", encoding="utf-8") as html_file:
         html_file_content = html_file.read()
 
-    st.components.v1.html(
-        html_file_content,
-        height=600, # Adjust height as needed
-    )
+    # Embed the HTML file in a scrollable iframe with a white background
+    iframe_code = f"""
+<iframe srcdoc="{html_file_content}" width="100%" height="600px" style="border:none; background-color:white;"></iframe>
+"""
+    st.components.v1.html(iframe_code, height=600, scrolling=True)
