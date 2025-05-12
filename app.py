@@ -149,7 +149,7 @@ if question:
             st.write(doc.page_content[:300]) # Process as a LangChain document if not in debug mode
     
     # Display BBL Html as a source
-    st.markdown("### Volledige bronmateriaal")
+    st.markdown("### Gebruikte bronnen")
 
     html_file_path = "bbl_full_text.html"
     with open(html_file_path, "r", encoding="utf-8") as html_file:
@@ -159,16 +159,4 @@ if question:
     iframe_code = f"""
 <iframe srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white;"></iframe>
 """
-    st.components.v1.html(iframe_code, height=800, scrolling=True)
-
-# Add CSS to hide the outer scrollbar
-st.markdown(
-    """
-    <style>
-    iframe {
-        overflow: hidden; /* Prevent iframe from introducing its own scrollbar */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+    st.components.v1.html(iframe_code, height=700, scrolling=True)
