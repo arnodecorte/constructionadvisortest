@@ -1,6 +1,6 @@
 import streamlit as st
 from dotenv import load_dotenv
-import os
+import re
 
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.embeddings import OpenAIEmbeddings
@@ -141,22 +141,44 @@ if question:
         else:
             st.warning("Vul alstublieft een feedbackcommentaar in voordat u verzendt.")
 
+    # Function to extract article or section numbers and create hyperlinks
+    def create_hyperlinked_source(source_text):
+        # Match article numbers (e.g., Artikel 2.24)
+        article_match = re.search(r'Artikel\s(\d+\.\d+)', source_text)
+        if article_match:
+            article_id = f"artikel-{article_match.group(1)}"
+            return f'<a href="#{article_id}" target="iframe">{source_text}</a>'
+        
+        # Match section numbers (e.g., § 2.3.2)
+        section_match = re.search(r'§\s(\d+\.\d+\.\d+)', source_text)
+        if section_match:
+            section_id = f"section-{section_match.group(1)}"
+            return f'<a href="#{section_id}" target="iframe">{source_text}</a>'
+        
+        # If no match, return the plain source text
+        return source_text
+
+    # Display AI-generated sources with hyperlinks
     st.markdown("### Gebruikte bron:")
     for doc in result["source_documents"]:
         if isinstance(doc, dict):
-            st.write(doc["page_content"][:300]) # Process as a dictionary if debug mode is on
+            source_text = doc["page_content"][:300]  # Process as a dictionary if debug mode is on
         else:
-            st.write(doc.page_content[:300]) # Process as a LangChain document if not in debug mode
+            source_text = doc.page_content[:300]  # Process as a LangChain document if not in debug mode
+        
+        # Create a hyperlink for the source text
+        hyperlinked_source = create_hyperlinked_source(source_text)
+        st.markdown(hyperlinked_source, unsafe_allow_html=True)
     
     # Display BBL Html as a source
-    st.markdown("### Gebruikte bronnen")
+    st.markdown("### Volledige Bouwbesluit:")
 
     html_file_path = "bbl_full_text.html"
     with open(html_file_path, "r", encoding="utf-8") as html_file:
         html_file_content = html_file.read()
 
-    # Embed the HTML file in a scrollable iframe with a white background
+    # Embed the HTML file in an iframe
     iframe_code = f"""
-<iframe srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white;"></iframe>
+<iframe id="iframe" srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white;"></iframe>
 """
-    st.components.v1.html(iframe_code, height=700, scrolling=True)
+    st.components.v1.html(iframe_code, height=800, scrolling=True)
