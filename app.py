@@ -176,9 +176,8 @@ if question:
     html_file_path = "bbl_full_text.html"
     with open(html_file_path, "r", encoding="utf-8") as html_file:
         html_file_content = html_file.read()
-
-    # Embed the HTML file in an iframe with proper styling
-    iframe_code = f"""
-<iframe id="iframe" srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white; overflow:auto;"></iframe>
-"""
+        # Embed the HTML file in an iframe with proper styling
+        iframe_code = f"""
+    <iframe id="iframe" srcdoc="{html_file_content}" width="100%" height="1000px" style="border:none; background-color:white; overflow:auto;"></iframe>
+    """
     st.components.v1.html(iframe_code, height=800, scrolling=True)
