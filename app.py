@@ -177,8 +177,8 @@ if question:
     with open(html_file_path, "r", encoding="utf-8") as html_file:
         html_file_content = html_file.read()
 
-    # Embed the HTML file in an iframe
+    # Embed the HTML file in a scrollable iframe with a white background
     iframe_code = f"""
-<iframe id="iframe" srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white;"></iframe>
+<iframe srcdoc="{html_file_content}" width="100%" height="800px" style="border:none; background-color:white;"></iframe>
 """
-    st.components.v1.html(iframe_code, height=800, scrolling=True)
+    st.components.v1.html(iframe_code, height=700, scrolling=True)
