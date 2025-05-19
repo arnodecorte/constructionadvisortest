@@ -172,15 +172,6 @@ if question:
     
     # Display BBL Html as a source
     st.markdown("### Volledige Bouwbesluit:")
-
-    html_file_path = "bbl_full_text.html"
-    with open(html_file_path, "r", encoding="utf-8") as html_file:
-        html_file_content = html_file.read()
-        # Embed the HTML file in an iframe with proper styling
-        iframe_code = f"""
-<div style="width: 100%; overflow: hidden;">
-    <iframe id="iframe" srcdoc='{html_file_content}' width="100%" height="1200px" 
-    style="border:none; background-color:white; overflow:auto;"></iframe>
-</div>
-"""
-st.components.v1.html(iframe_code, height=1200, width=None, scrolling=True)
+    with open("bbl_full_text.html", "r", encoding="utf-8") as html_file:
+        html_content = html_file.read()
+        st.components.v1.html(html_content, height=1200, width=None, scrolling=True)
