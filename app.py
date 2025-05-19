@@ -178,6 +178,9 @@ if question:
         html_file_content = html_file.read()
         # Embed the HTML file in an iframe with proper styling
         iframe_code = f"""
-    <iframe id="iframe" srcdoc="{html_file_content}" width="1200px" height="1200px" style="border:none; background-color:white; overflow:auto;"></iframe>
-    """
-    st.components.v1.html(iframe_code, height=1200, scrolling=True)
+            <div style="width: 100%; overflow: hidden;">
+    <iframe id="iframe" srcdoc='{html_file_content}' width="100%" height="1200px" 
+           style="border:none; background-color:white; overflow:auto;"></iframe>
+            </div>
+        """
+        st.components.v1.html(iframe_code, height=1200, width=None, scrolling=True)
