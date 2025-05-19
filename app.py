@@ -174,4 +174,4 @@ if question:
     st.markdown("### Volledige Bouwbesluit:")
     with open("bbl_full_text.html", "r", encoding="utf-8") as html_file:
         html_content = html_file.read()
-        st.components.v1.html(html_content, height=1200, width=None, scrolling=True)
+        st.components.v1.html(html_content, height=5000, width=None, scrolling=True)
