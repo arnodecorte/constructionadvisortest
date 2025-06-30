@@ -71,7 +71,18 @@ embeddings = OpenAIEmbeddings()
 vectorstore = FAISS.from_texts(chunks, embeddings)
 retriever = vectorstore.as_retriever()
 
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
+# Add this before you create the llm instance
+temperature = st.slider(
+    "Creativiteit van het antwoord (temperature)", 
+    min_value=0.0, 
+    max_value=1.0, 
+    value=0.1, 
+    step=0.05,
+    help="Lager = preciezer, hoger = creatiever"
+)
+
+# Use the selected temperature when creating the LLM
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=temperature)
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
     retriever=retriever,
@@ -141,26 +152,37 @@ if question:
         else:
             st.warning("Vul alstublieft een feedbackcommentaar in voordat u verzendt.")
 
-    # Build the sources list as HTML
-    sources_html = "<h3>Gebruikte bron:</h3><ul>"
-    for doc in result["source_documents"]:
-        source_text = doc["page_content"][:300] if isinstance(doc, dict) else doc.page_content[:300]
-        # Try to extract article number
+    # Function to extract article or section numbers and create hyperlinks
+    def create_hyperlinked_source(source_text):
+        # Match article numbers (e.g., Artikel 2.24)
         article_match = re.search(r'Artikel\s(\d+\.\d+)', source_text)
         if article_match:
             article_id = f"artikel-{article_match.group(1)}"
-            link = f'<a href="#{article_id}">{source_text}</a>'
-        else:
-            link = source_text
-        sources_html += f"<li>{link}</li>"
-    sources_html += "</ul>"
+            return f'<a href="#{article_id}" target="iframe">{source_text}</a>'
+        
+        # Match section numbers (e.g., § 2.3.2)
+        section_match = re.search(r'§\s(\d+\.\d+\.\d+)', source_text)
+        if section_match:
+            section_id = f"section-{section_match.group(1)}"
+            return f'<a href="#{section_id}" target="iframe">{source_text}</a>'
+        
+        # If no match, return the plain source text
+        return source_text
 
-    # Load the full HTML document
+    # Display AI-generated sources with hyperlinks
+    st.markdown("### Gebruikte bron:")
+    for doc in result["source_documents"]:
+        if isinstance(doc, dict):
+            source_text = doc["page_content"][:300]  # Process as a dictionary if debug mode is on
+        else:
+            source_text = doc.page_content[:300]  # Process as a LangChain document if not in debug mode
+        
+        # Create a hyperlink for the source text
+        hyperlinked_source = create_hyperlinked_source(source_text)
+        st.markdown(hyperlinked_source, unsafe_allow_html=True)
+    
+    # Display BBL Html as a source
+    st.markdown("### Volledige Bouwbesluit:")
     with open("bbl_full_text.html", "r", encoding="utf-8") as html_file:
         html_content = html_file.read()
-
-    # Combine sources and document
-    combined_html = sources_html + html_content
-
-    # Render all together
-    st.components.v1.html(combined_html, height=2000, scrolling=True)
+        st.components.v1.html(html_content, height=2000, width=None, scrolling=True)
