@@ -72,14 +72,15 @@ vectorstore = FAISS.from_texts(chunks, embeddings)
 retriever = vectorstore.as_retriever()
 
 # Add this before you create the llm instance
-temperature = st.slider(
-    "Creativiteit van het antwoord (temperature)", 
-    min_value=0.0, 
-    max_value=1.0, 
-    value=0.1, 
-    step=0.05,
-    help="Lager = preciezer, hoger = creatiever"
-)
+with st.expander("Advanced controls"):
+    temperature = st.slider(
+        "Creativiteit van het antwoord (temperature)", 
+        min_value=0.0, 
+        max_value=1.0, 
+        value=0.1, 
+        step=0.05,
+        help="Lager = preciezer, hoger = creatiever"
+    )
 
 # Use the selected temperature when creating the LLM
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=temperature)
