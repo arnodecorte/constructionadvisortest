@@ -34,12 +34,15 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
         "comment": comment,
         "timestamp": timestamp
     }
-    # Actually send to Supabase
-    response = supabase.table("ZJAC - feedback").insert(data).execute()
-    if response.status_code == 201:
-        st.write("✅ Feedback opgeslagen in Supabase.")
-    else:
-        st.error(f"❌ Fout bij opslaan in Supabase: {response.data}")
+    try:
+        response = supabase.table("feedback").insert(data).execute()
+        # If insert is successful, response.data will be a list with the inserted row
+        if response.data and isinstance(response.data, list):
+            st.write("✅ Feedback opgeslagen in Supabase.")
+        else:
+            st.error(f"❌ Fout bij opslaan in Supabase: {response.data}")
+    except Exception as e:
+        st.error(f"❌ Fout bij opslaan in Supabase: {e}")
 
 #Load the OpenAI API key from the environment
 
