@@ -34,8 +34,12 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
         "comment": comment,
         "timestamp": timestamp
     }
-
-    st.write("📤 Submitting this to Supabase:")
+    # Actually send to Supabase
+    response = supabase.table("feedback").insert(data).execute()
+    if response.status_code == 201:
+        st.write("✅ Feedback opgeslagen in Supabase.")
+    else:
+        st.error(f"❌ Fout bij opslaan in Supabase: {response.data}")
 
 #Load the OpenAI API key from the environment
 
