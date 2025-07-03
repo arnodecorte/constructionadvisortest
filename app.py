@@ -35,7 +35,7 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
         "timestamp": timestamp
     }
     # Actually send to Supabase
-    response = supabase.table("feedback").insert(data).execute()
+    response = supabase.table("ZJAC - feedback").insert(data).execute()
     if response.status_code == 201:
         st.write("✅ Feedback opgeslagen in Supabase.")
     else:
