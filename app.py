@@ -111,7 +111,7 @@ if "last_result" not in st.session_state:
 # User input
 question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
 
-col1, col2 = st.columns(3,1)
+col1, col2 = st.columns([3,1])
 with col2:
     submit = st.button("Submit")
 
