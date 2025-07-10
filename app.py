@@ -190,18 +190,11 @@ def create_hyperlinked_source(source_text):
     # If no match, return the plain source text
     return source_text
 
-# Display AI-generated sources with hyperlinks
+# Display AI-generated sources as plain text
 st.markdown("### Gebruikte bron:")
 for doc in result["source_documents"]:
-    if isinstance(doc, dict):
-        source_text = doc["page_content"][:300]  # Process as a dictionary if debug mode is on
-    else:
-        source_text = doc.page_content[:300]  # Process as a LangChain document if not in debug mode
-    
-    # Create a hyperlink for the source text
-    hyperlinked_source = create_hyperlinked_source(source_text)
-    st.markdown(hyperlinked_source, unsafe_allow_html=True)
-    
+    st.write(str(doc)[:300])
+
 # Display BBL Html as a source
 st.markdown("### Volledige Bouwbesluit:")
 with open("bbl_full_text.html", "r", encoding="utf-8") as html_file:
