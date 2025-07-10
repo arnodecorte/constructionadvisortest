@@ -104,7 +104,7 @@ if debug_mode:
 
 # Initialize session state for question and result
 if "last_question" not in st.session_state:
-    st.session_state,last_question = ""
+    st.session_state.last_question = ""
 if "last_result" not in st.session_state:
     st.session_state.last_result = ""
 
