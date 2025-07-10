@@ -110,10 +110,7 @@ if "last_result" not in st.session_state:
 
 # User input
 question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
-
-col1, col2 = st.columns([3,1])
-with col2:
-    submit = st.button("Submit")
+submit = st.button("Submit")
 
 if submit and question:
     # Only call the LLM if the question is new or changed
