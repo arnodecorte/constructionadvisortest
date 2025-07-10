@@ -13,7 +13,6 @@ import datetime
 import os
 
 # Load .env file
-
 load_dotenv()
     
 # Load Supabase credentials from environment variables
@@ -44,8 +43,7 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
     except Exception as e:
         st.error(f"❌ Fout bij opslaan in Supabase: {e}")
 
-#Load the OpenAI API key from the environment
-
+# Load the OpenAI API key from the environment
 api_key = st.secrets["OPENAI_API_KEY"]
 os.environ["OPENAI_API_KEY"] = api_key
 
@@ -58,13 +56,11 @@ os.environ["OPENAI_API_KEY"] = api_key
 st.title("ZJAC - BBL AI Assistant")
 st.markdown("Deze applicatie helpt je bij het vinden van informatie over de Nederlandse bouwvoorschriften (Bouwbesluit). Stel een vraag en ontvang een antwoord gebaseerd op de regelgeving.")
 
-#load building regulations
-
+# Load building regulations
 with open("bbl_full_text.txt", "r", encoding="utf-8") as f:
     regulation_text = f.read()
 
-#split into chunks so the AI can handle it
-
+# Split into chunks so the AI can handle it
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
     chunk_overlap=200,
@@ -72,13 +68,12 @@ splitter = RecursiveCharacterTextSplitter(
 )
 chunks = splitter.split_text(regulation_text)
 
-#Create embeddings from chunks and store them as vectors
-
+# Create embeddings from chunks and store them as vectors
 embeddings = OpenAIEmbeddings()
 vectorstore = FAISS.from_texts(chunks, embeddings)
 retriever = vectorstore.as_retriever()
 
-# Add this before you create the llm instance
+# Advanced controls
 with st.expander("Advanced controls"):
     temperature = st.slider(
         "Creativiteit van het antwoord (temperature)", 
@@ -102,12 +97,12 @@ debug_mode = st.secrets.get("DEBUG_MODE", False)
 if debug_mode:
     st.warning("DEBUG MODE IS AAN")
 
+# User input and LLM call in a form
+with st.form("ask_form"):
+    question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
+    submit_question = st.form_submit_button("Vraag")
 
-# User input
-question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
-if question:
-    # Provide dummy response for debugging purposes
-
+if submit_question:
     if debug_mode:
         result = {
             "result": "Dit is een voorbeeldantwoord voor debugdoeleinden.",
@@ -116,20 +111,25 @@ if question:
             ]
         }
     else:
-        # actual GPT-3.5 call
         result = qa_chain(question)
+    st.session_state["last_result"] = result
+    st.session_state["last_question"] = question
+    st.session_state.no_feedback = False  # Reset feedback state on new question
+
+# Display the last result and feedback UI if available
+if "last_result" in st.session_state:
+    result = st.session_state["last_result"]
+    question = st.session_state["last_question"]
 
     st.markdown("### Antwoord:")
     st.write(result["result"])
-    
-    # Feedback Section
+
     st.markdown("### Was dit antwoord nuttig?")
     col1, col2 = st.columns(2)
-    
-    # Use session state to track the feedback button state
+
     if "no_feedback" not in st.session_state:
         st.session_state.no_feedback = False
-    
+
     with col1:
         if st.button("👍 Ja"):
             submit_feedback(
@@ -142,12 +142,12 @@ if question:
     with col2:
         if st.button("👎 Nee"):
             st.session_state.no_feedback = True  # This will trigger the feedback comment input
-            
+
     if st.session_state.no_feedback:
         st.markdown('### Feedback:')
         feedback_comment = st.text_area("Wat was er mis met het antwoord?", height=150)
         if st.button("Verzend feedback"):
-            if feedback_comment.strip(): # Ensure comment is not empty
+            if feedback_comment.strip():  # Ensure comment is not empty
                 submit_feedback(
                     question,
                     result["result"],
@@ -162,7 +162,6 @@ if question:
 
     # Function to display source chunk as plain text
     def display_source_chunk(source_text):
-        # Just return the first 300 characters as plain text
         return source_text[:300]
 
     # Display AI-generated sources as plain text
@@ -174,7 +173,7 @@ if question:
             source_text = doc.page_content
         plain_source = display_source_chunk(source_text)
         st.markdown(plain_source)
-    
+
     # Display BBL Html as a source
     st.markdown("### Volledige Bouwbesluit:")
     with open("bbl_full_text.html", "r", encoding="utf-8") as html_file:
