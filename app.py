@@ -177,17 +177,20 @@ if question:
         # If no match, return the plain source text
         return source_text
 
-    # Display AI-generated sources with hyperlinks
+    # Function to display source chunk as plain text
+    def display_source_chunk(source_text):
+        # Just return the first 300 characters as plain text
+        return source_text[:300]
+
+    # Display AI-generated sources as plain text
     st.markdown("### Gebruikte bron:")
     for doc in result["source_documents"]:
         if isinstance(doc, dict):
-            source_text = doc["page_content"][:300]  # Process as a dictionary if debug mode is on
+            source_text = doc["page_content"]
         else:
-            source_text = doc.page_content[:300]  # Process as a LangChain document if not in debug mode
-        
-        # Create a hyperlink for the source text
-        hyperlinked_source = create_hyperlinked_source(source_text)
-        st.markdown(hyperlinked_source, unsafe_allow_html=True)
+            source_text = doc.page_content
+        plain_source = display_source_chunk(source_text)
+        st.markdown(plain_source)
     
     # Display BBL Html as a source
     st.markdown("### Volledige Bouwbesluit:")
