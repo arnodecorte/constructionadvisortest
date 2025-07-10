@@ -175,13 +175,17 @@ if st.session_state.no_feedback:
 
 # Display AI-generated sources as plain text
 st.markdown("### Gebruikte bron:")
-for doc in result["source_documents"]:
-    if isinstance(doc, dict) and "page_content" in doc:
-        st.write(str(doc["page_content"])[:300])
-    elif hasattr(doc, "page_content"):
-        st.write(str(doc.page_content)[:300])
-    else:
-        st.write(str(doc)[:300])
+source_docs = result.get("source_documents", [])
+if isinstance(source_docs, list):
+    for doc in source_docs:
+        if isinstance(doc, dict) and "page_content" in doc:
+            st.write(str(doc["page_content"])[:300])
+        elif hasattr(doc, "page_content"):
+            st.write(str(doc.page_content)[:300])
+        else:
+            st.write(str(doc)[:300])
+else:
+    st.write(str(source_docs)[:300])
 
 # Display BBL Html as a source
 st.markdown("### Volledige Bouwbesluit:")
