@@ -111,7 +111,7 @@ if "last_result" not in st.session_state:
 # User input
 question = st.text_input("Stel een vraag over de Nederlandse bouwvoorschriften:")
 
-submit = st.button("Submit")
+submit = st.button("Vraag AI")
 
 if submit and question:
     # Only call the LLM if the question is new or changed
