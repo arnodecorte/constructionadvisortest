@@ -173,27 +173,15 @@ if st.session_state.no_feedback:
     else:
         st.warning("Vul alstublieft een feedbackcommentaar in voordat u verzendt.")
 
-# Function to extract article or section numbers and create hyperlinks
-def create_hyperlinked_source(source_text):
-    # Match article numbers (e.g., Artikel 2.24)
-    article_match = re.search(r'Artikel\s(\d+\.\d+)', source_text)
-    if article_match:
-        article_id = f"artikel-{article_match.group(1)}"
-        return f'<a href="#{article_id}" target="iframe">{source_text}</a>'
-    
-    # Match section numbers (e.g., § 2.3.2)
-    section_match = re.search(r'§\s(\d+\.\d+\.\d+)', source_text)
-    if section_match:
-        section_id = f"section-{section_match.group(1)}"
-        return f'<a href="#{section_id}" target="iframe">{source_text}</a>'
-    
-    # If no match, return the plain source text
-    return source_text
-
 # Display AI-generated sources as plain text
 st.markdown("### Gebruikte bron:")
 for doc in result["source_documents"]:
-    st.write(str(doc)[:300])
+    if isinstance(doc, dict) and "page_content" in doc:
+        st.write(str(doc["page_content"])[:300])
+    elif hasattr(doc, "page_content"):
+        st.write(str(doc.page_content)[:300])
+    else:
+        st.write(str(doc)[:300])
 
 # Display BBL Html as a source
 st.markdown("### Volledige Bouwbesluit:")
