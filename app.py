@@ -160,23 +160,6 @@ if question:
         else:
             st.warning("Vul alstublieft een feedbackcommentaar in voordat u verzendt.")
 
-    # Function to extract article or section numbers and create hyperlinks
-    def create_hyperlinked_source(source_text):
-        # Match article numbers (e.g., Artikel 2.24)
-        article_match = re.search(r'Artikel\s(\d+\.\d+)', source_text)
-        if article_match:
-            article_id = f"artikel-{article_match.group(1)}"
-            return f'<a href="#{article_id}" target="iframe">{source_text}</a>'
-        
-        # Match section numbers (e.g., § 2.3.2)
-        section_match = re.search(r'§\s(\d+\.\d+\.\d+)', source_text)
-        if section_match:
-            section_id = f"section-{section_match.group(1)}"
-            return f'<a href="#{section_id}" target="iframe">{source_text}</a>'
-        
-        # If no match, return the plain source text
-        return source_text
-
     # Function to display source chunk as plain text
     def display_source_chunk(source_text):
         # Just return the first 300 characters as plain text
