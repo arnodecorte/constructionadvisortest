@@ -25,7 +25,7 @@ def show_welcome_popup():
         with st.container():
             
             st.markdown("""
-            **Belangrijke informatie over het gebruik van deze applicatie:**
+            **Belangrijke informatie over het gebruik van deze applicatie (English + OK button below):**
             
             Dit is een experimentele applicatie, dus antwoorden kunnen onjuist zijn.
 
