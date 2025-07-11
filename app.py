@@ -27,7 +27,7 @@ def show_welcome_popup():
             st.markdown("""
             **Belangrijke informatie over het gebruik van deze applicatie (English + OK button below):**
             
-            Dit is een experimentele applicatie, dus antwoorden kunnen onjuist zijn.
+            Dit is een experimentele applicatie, dus antwoorden kunnen onjuist zijn. Het programma zelf kan ook bugs bevatten, dus meld ze als je ze vindt.
 
             Elke vraag kost (een beetje) geld, omdat we de API en tokens van OpenAI gebruiken om vragen te beantwoorden. Het is geen groot bedrag, maar zorg ervoor dat je geen vragen spamt, zodat we binnen het maandelijkse budget blijven.
 
@@ -37,7 +37,7 @@ def show_welcome_popup():
                         
             ---------
                         
-            This is an experimental application so answers may be incorrect.
+            This is an experimental application so answers may be incorrect. The program itself may also contain bugs, so please report them if you find any.
 
             Each question costs (a little bit) of money as we are using OpenAI's API and tokens to answer questions. It is not a large amount, but please be mindful not to spam questions so that we remain within the monthly budget.
 
