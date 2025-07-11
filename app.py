@@ -23,16 +23,6 @@ def show_welcome_popup():
 
     with col2:
         with st.container():
-            st.markdown("""
-                <div style="
-                    border: 2px solid #e0e0e0;
-                    border-radius: 10px;
-                    padding: 30px;
-                    background-color: #f8f9fa;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    margin: 50px 0;
-                ">
-                """, unsafe_allow_html=True)
             
             st.markdown("""
             **Belangrijke informatie over het gebruik van deze applicatie:**
