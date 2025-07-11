@@ -34,7 +34,7 @@ def submit_feedback(question, answer, source_chunks, rating, comment=""):
         "timestamp": timestamp
     }
     try:
-        response = supabase.table("feedback").insert(data).execute()
+        response = supabase.table("ZJAC - feedback").insert(data).execute()
         # If insert is successful, response.data will be a list with the inserted row
         if response.data and isinstance(response.data, list):
             st.write("✅ Feedback opgeslagen in Supabase.")
